@@ -249,6 +249,7 @@
   .t-tag.game{ background:rgba(244,180,0,0.15); color:var(--gold-soft);}
   .t-tag.family{ background:rgba(143,163,189,0.15); color:var(--chalk-dim);}
   .t-tag.mandatory{ background:rgba(224,90,78,0.16); color:var(--red);}
+  .t-tag.highlight{ background:rgba(62,163,106,0.16); color:var(--turf-soft);}
 
   /* ---------- packing tab ---------- */
   .progress-wrap{ margin-bottom:18px;}
@@ -573,7 +574,7 @@ const SCHEDULE = [
       {time:'9:00 AM', title:'Merch outlets open', detail:'Pre-orders available for pickup.'},
       {time:'9:00 AM – 12:00 PM', title:'Coaches check-in & uniform exchange', tag:'mandatory',
         detail:'Coach checks in the whole team at Player Dining Pavilion — valid photo ID required. This is the only window to exchange uniform sizes, closes sharp at 4:15 PM.'},
-      {time:'10:00 AM – 3:00 PM', title:'Skills Competition qualifiers', tag:'game',
+      {time:'10:00 AM – 3:00 PM', title:'Skills Competition qualifiers', tag:'highlight',
         detail:'Blue jersey + wristband required. Home Run Derby: Fields 3 & 7 · Fastest Player: Field 6 · Turn Two (Double Play): Field 4. All qualifiers must finish by 3:00 PM.'},
       {time:'10:00 AM – 4:00 PM', title:'Team photos', detail:'Glossy Finish Photo Studio, behind the Cooperstown Gear Shop. Coach gets the time slot at check-in.'},
       {time:'11:00 AM', title:'Team pizza lunch', detail:'Restaurant & bar open. Organizer: Ashley Blossom. Grab belongings from the car afterward for move-in.'},
@@ -581,7 +582,7 @@ const SCHEDULE = [
       {time:'3:30 – 4:30 PM', title:'Mandatory coaches meeting', tag:'mandatory', detail:'Player Dining Pavilion, includes an MLB Ambassador Q&A.'},
       {time:'3:30 PM', title:'Reserve family spots', detail:'Parents can reserve viewing spots for Opening Ceremony at Field 5 (first-come, first-served).'},
       {time:'5:00 PM', title:'Mandatory team fire drill', tag:'mandatory', detail:'Bring ALL equipment, banner, and parade swag. Blue Cooperstown jerseys, white pants, team socks.'},
-      {time:'5:30 PM', title:'Opening Ceremonies, Player Parade & Skills Finals', tag:'game',
+      {time:'5:30 PM', title:'Opening Ceremonies, Player Parade & Skills Finals', tag:'highlight',
         detail:'Field 5. T-shirt toss, player march, national anthem, then Skills Competition finals.'},
       {time:'7:00 – 10:00 PM', title:'Player & Coach BBQ', tag:'family', detail:'Players and coaches only — wristbands required.'},
     ]
@@ -851,6 +852,10 @@ function renderScoreboard(){
     const gameItems = activeDay.items.filter(i=>i.tag==='game');
     if(gameItems.length){
       bigEl.innerHTML = `<em>${gameItems.length}</em> game${gameItems.length>1?'s':''} today`;
+    } else if(activeDay.day === 1){
+      bigEl.innerHTML = `<em>Opening</em> Day`;
+    } else if(activeDay.day === 7){
+      bigEl.innerHTML = `<em>Move-out</em> Day`;
     } else {
       bigEl.innerHTML = `Rest &amp; <em>reset</em>`;
     }
@@ -868,6 +873,8 @@ function renderScoreboard(){
           <span class="vs">${g.title.replace('GAME '+ (g.title.match(/^GAME (\d)/)||[])[1]+' ','')}</span>
           <span class="meta">${g.time}${g.detail && g.detail.match(/Field \d+/) ? ' · '+g.detail.match(/Field \d+/)[0] : ''}</span>
         </div>`).join('');
+    } else if(activeDay.day === 1){
+      gamesEl.innerHTML = '<div class="sb-empty">No head-to-head games yet — today\'s the Skills Competition & Opening Ceremony. First game is tomorrow.</div>';
     } else {
       gamesEl.innerHTML = '<div class="sb-empty">No games scheduled today — check the Schedule tab for activities.</div>';
     }
@@ -983,7 +990,7 @@ function renderDayContent(){
     ${dutyHtml}
     <div class="timeline">
       ${d.items.map(it=>`
-        <div class="t-item ${it.tag==='game'?'is-game':''} ${it.tag==='mandatory'?'is-highlight':''}">
+        <div class="t-item ${it.tag==='game'?'is-game':''} ${(it.tag==='mandatory'||it.tag==='highlight')?'is-highlight':''}">
           <div class="t-dot"></div>
           <div class="t-time">${it.time}</div>
           <div class="t-title">${it.title}</div>
