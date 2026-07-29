@@ -158,6 +158,15 @@
   .update-body .ub-msg{ font-size:13.5px; color:var(--chalk); line-height:1.5; font-weight:500;}
   .update-body .ub-time{ font-family:var(--mono); font-size:10.5px; color:var(--chalk-dimmer); margin-top:5px;}
 
+  /* ---------- up next list ---------- */
+  .upnext-row{ display:flex; gap:12px; align-items:flex-start; padding:11px 2px; border-bottom:1px solid var(--line);}
+  .upnext-row:last-child{ border-bottom:none;}
+  .un-when{ flex:0 0 58px; }
+  .un-when .un-day{ display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:0.6px; color:var(--turf-soft); font-weight:700; text-transform:uppercase;}
+  .un-when .un-time{ display:block; font-family:var(--mono); font-size:11.5px; color:var(--gold-soft); font-weight:600; margin-top:2px;}
+  .un-info .un-title{ font-size:13.5px; color:var(--chalk); font-weight:600; line-height:1.4;}
+  .upnext-empty{ font-size:13px; color:var(--chalk-dimmer); padding:6px 2px;}
+
   /* ---------- generic cards ---------- */
   .card{
     background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
@@ -371,11 +380,10 @@
 
       <div id="updateBanner"></div>
 
-      <div class="eyebrow">Team notes</div>
+      <div class="eyebrow">Up next</div>
       <div class="card">
-        <div class="card-title" style="margin-bottom:8px;">🗒️ Bunkhouse, contacts, reminders</div>
-        <textarea class="notes" id="notesBox" placeholder="e.g. Bunkhouse: Yankee Stadium (H) · Coach Mike cell: 555-0100 · Meet at Sal's 11am Day 4..."></textarea>
-        <div class="save-hint">Saved automatically on this device.</div>
+        <div class="card-title" style="margin-bottom:6px;">⏱️ Next on the schedule</div>
+        <div class="upnext-list" id="upNextList"></div>
       </div>
 
       <div class="eyebrow">Quick links</div>
@@ -878,6 +886,68 @@ function countdownUnits(d,h,m){
 }
 
 /* ============================================================
+   UP NEXT (next 3 chronological schedule items from "now")
+   ============================================================ */
+function parseEventStart(timeStr){
+  // Pulls the first clock time out of strings like "5:30 PM" or "12:00 – 4:15 PM"
+  // or "By 8:00 AM", borrowing AM/PM from the second half of a range when the
+  // first half doesn't state one (e.g. "7:00 – 10:00 PM" -> 7:00 PM).
+  const matches = [...timeStr.matchAll(/(\d{1,2}):(\d{2})\s*(AM|PM)?/gi)];
+  if(!matches.length) return null;
+  let hh = parseInt(matches[0][1], 10);
+  const mm = parseInt(matches[0][2], 10);
+  let mer = matches[0][3] || (matches[1] && matches[1][3]) || 'PM';
+  mer = mer.toUpperCase();
+  if(mer === 'PM' && hh !== 12) hh += 12;
+  if(mer === 'AM' && hh === 12) hh = 0;
+  return { hh, mm };
+}
+
+function getUpcomingEvents(now, count){
+  const all = [];
+  SCHEDULE.forEach(d=>{
+    const base = new Date(TRIP_START.getFullYear(), TRIP_START.getMonth(), TRIP_START.getDate() + (d.day - 1));
+    d.items.forEach(it=>{
+      const t = parseEventStart(it.time);
+      if(!t) return;
+      const dt = new Date(base.getFullYear(), base.getMonth(), base.getDate(), t.hh, t.mm);
+      all.push({ dt, dayNum:d.day, dayShort:d.short, title:it.title, time:it.time, tag:it.tag });
+    });
+  });
+  all.sort((a,b)=>a.dt-b.dt);
+  return all.filter(e=>e.dt >= now).slice(0, count);
+}
+
+function dayRelativeLabel(eventDt, now){
+  const oneDay = 86400000;
+  const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const evtDateOnly = new Date(eventDt.getFullYear(), eventDt.getMonth(), eventDt.getDate());
+  const diff = Math.round((evtDateOnly - nowDateOnly)/oneDay);
+  if(diff === 0) return 'TODAY';
+  if(diff === 1) return 'TOMORROW';
+  return evtDateOnly.toLocaleDateString('en-US', {weekday:'short'}).toUpperCase();
+}
+
+function renderUpNext(){
+  const wrap = document.getElementById('upNextList');
+  if(!wrap) return;
+  const now = new Date();
+  const events = getUpcomingEvents(now, 3);
+  if(!events.length){
+    wrap.innerHTML = '<div class="upnext-empty">Nothing left on the schedule — trip\'s a wrap!</div>';
+    return;
+  }
+  wrap.innerHTML = events.map(e=>`
+    <div class="upnext-row">
+      <div class="un-when"><span class="un-day">${dayRelativeLabel(e.dt, now)}</span><span class="un-time">${e.time.split(/[–-]/)[0].trim()}</span></div>
+      <div class="un-info">
+        <div class="un-title">${e.title}</div>
+        ${e.tag?`<span class="t-tag ${e.tag}">${e.tag}</span>`:''}
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
    SCHEDULE TAB
    ============================================================ */
 let currentDayIdx = 0;
@@ -1053,21 +1123,10 @@ document.getElementById('faqSearch').addEventListener('input', (e)=>{
 });
 
 /* ============================================================
-   NOTES
-   ============================================================ */
-let notesTimer = null;
-document.getElementById('notesBox').addEventListener('input', (e)=>{
-  clearTimeout(notesTimer);
-  notesTimer = setTimeout(()=>{ saveState('team-notes', e.target.value); }, 500);
-});
-
-/* ============================================================
    INIT
    ============================================================ */
 async function init(){
   packState = await loadState('packing-state', {});
-  const notes = await loadState('team-notes', '');
-  document.getElementById('notesBox').value = notes;
 
   const activeDay = renderScoreboard();
   currentDayIdx = Math.max(0, getDayIndexForDate(new Date()));
@@ -1078,10 +1137,11 @@ async function init(){
   renderDining();
   renderMap();
   renderUpdates();
+  renderUpNext();
   renderFaq('');
 
-  // refresh scoreboard every minute
-  setInterval(renderScoreboard, 60000);
+  // refresh scoreboard + up-next every minute
+  setInterval(()=>{ renderScoreboard(); renderUpNext(); }, 60000);
 }
 init();
 </script>
