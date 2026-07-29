@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Stars Sethi @ Cooperstown — Team Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1622;
+    --bg-2:#081019;
+    --panel:#132436;
+    --panel-2:#1a3049;
+    --panel-3:#0f2032;
+    --line:rgba(232,238,247,0.09);
+    --line-strong:rgba(232,238,247,0.16);
+    --gold:#f4b400;
+    --gold-soft:#ffd873;
+    --turf:#3ea36a;
+    --turf-soft:#8fe0ac;
+    --red:#e05a4e;
+    --chalk:#f3f0e6;
+    --chalk-dim:#9fb0c6;
+    --chalk-dimmer:#6f8299;
+    --radius:16px;
+    --disp:'Teko',sans-serif;
+    --body:'Inter',sans-serif;
+    --mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 12% -10%, rgba(244,180,0,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 0%, rgba(62,163,106,0.10), transparent 55%),
+      var(--bg-2);
+    color:var(--chalk);
+    font-family:var(--body);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app-shell{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 80px rgba(0,0,0,0.5);
+  }
+  @media (min-width:560px){
+    .app-shell{ min-height:100vh; margin-top:0; }
+    body{ padding:0; }
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:linear-gradient(180deg, var(--bg) 70%, rgba(11,22,34,0));
+    padding:16px 18px 10px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(6px);
+  }
+  .brand{ display:flex; align-items:baseline; gap:8px; }
+  .brand-mark{
+    font-family:var(--disp); font-weight:700; font-size:24px; letter-spacing:0.3px;
+    color:var(--chalk); line-height:1; white-space:nowrap;
+  }
+  .brand-mark span{ color:var(--gold); }
+  .brand-sub{ font-size:10.5px; letter-spacing:1.5px; color:var(--chalk-dimmer); text-transform:uppercase; font-weight:600;}
+  .topbar-right{ text-align:right; }
+  .week-chip{
+    font-family:var(--mono); font-size:10.5px; color:var(--turf-soft);
+    background:rgba(62,163,106,0.12); border:1px solid rgba(62,163,106,0.35);
+    padding:3px 8px; border-radius:20px; letter-spacing:0.5px;
+  }
+
+  /* ---------- tab content ---------- */
+  .content{ flex:1; padding:18px 18px 110px; }
+  .tab-panel{ display:none; animation:fade .25s ease; }
+  .tab-panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  h1.page-title{
+    font-family:var(--disp); font-weight:600; font-size:30px; letter-spacing:0.3px;
+    margin:2px 0 4px; color:var(--chalk);
+  }
+  .page-sub{ font-size:13px; color:var(--chalk-dim); margin:0 0 18px; line-height:1.5;}
+
+  /* ---------- scoreboard signature card ---------- */
+  .scoreboard{
+    position:relative;
+    background:linear-gradient(180deg, var(--panel-2), var(--panel-3));
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:20px 18px 18px;
+    margin-bottom:20px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .scoreboard::before{
+    content:"";
+    position:absolute; top:9px; left:14px; right:14px; height:4px;
+    background-image:radial-gradient(circle, rgba(244,180,0,0.85) 1.6px, transparent 1.8px);
+    background-size:14px 4px;
+    opacity:0.8;
+  }
+  .sb-row1{ display:flex; justify-content:space-between; align-items:flex-start; margin-top:10px;}
+  .sb-daylabel{ font-family:var(--mono); font-size:10.5px; letter-spacing:1.5px; color:var(--gold-soft); text-transform:uppercase;}
+  .sb-date{ font-family:var(--mono); font-size:10.5px; color:var(--chalk-dimmer); }
+  .sb-big{
+    font-family:var(--disp); font-weight:700; font-size:44px; line-height:1.02;
+    color:var(--chalk); letter-spacing:0.3px; margin:6px 0 2px;
+  }
+  .sb-big em{ font-style:normal; color:var(--gold); }
+  .sb-status{ font-size:13.5px; color:var(--chalk-dim); margin-bottom:14px; line-height:1.5;}
+  .sb-countdown{
+    display:flex; gap:8px; margin-top:8px;
+  }
+  .sb-unit{
+    flex:1; text-align:center; background:rgba(0,0,0,0.28); border:1px solid var(--line);
+    border-radius:10px; padding:8px 4px;
+  }
+  .sb-unit .n{ font-family:var(--mono); font-weight:600; font-size:19px; color:var(--gold-soft); display:block;}
+  .sb-unit .l{ font-size:9px; letter-spacing:1px; color:var(--chalk-dimmer); text-transform:uppercase;}
+  .sb-games{ margin-top:16px; border-top:1px dashed var(--line); padding-top:12px;}
+  .sb-game{ display:flex; justify-content:space-between; align-items:center; padding:7px 0; font-size:14px;}
+  .sb-game + .sb-game{ border-top:1px solid var(--line);}
+  .sb-game .vs{ color:var(--chalk); font-weight:600;}
+  .sb-game .meta{ font-family:var(--mono); font-size:11.5px; color:var(--turf-soft); text-align:right;}
+  .sb-empty{ font-size:13px; color:var(--chalk-dimmer); padding:6px 0 2px;}
+
+  /* ---------- generic cards ---------- */
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 16px; margin-bottom:14px;
+  }
+  .card-title{
+    font-family:var(--disp); font-weight:600; font-size:19px; letter-spacing:0.3px;
+    color:var(--chalk); margin:0 0 10px; display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--chalk-dimmer); margin:22px 0 8px; display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow:first-child{ margin-top:0;}
+  .eyebrow::after{ content:""; flex:1; height:1px; background:var(--line);}
+
+  /* quick links row */
+  .quicklinks{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px;}
+  .qlink{
+    flex:1 1 calc(50% - 8px); min-width:140px;
+    display:flex; align-items:center; gap:8px;
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:11px 12px; text-decoration:none; color:var(--chalk); font-size:12.5px; font-weight:600;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .qlink:active{ transform:scale(0.98); }
+  .qlink svg{ flex-shrink:0; color:var(--gold); }
+  .qlink .sm{ display:block; font-weight:400; color:var(--chalk-dimmer); font-size:10.5px; margin-top:1px;}
+
+  /* notes box */
+  textarea.notes{
+    width:100%; min-height:88px; resize:vertical;
+    background:var(--panel-3); border:1px solid var(--line); border-radius:10px;
+    color:var(--chalk); font-family:var(--body); font-size:13.5px; padding:10px 12px; line-height:1.5;
+  }
+  textarea.notes:focus{ outline:none; border-color:var(--gold); }
+  .save-hint{ font-size:10.5px; color:var(--chalk-dimmer); margin-top:6px;}
+
+  /* ---------- schedule tab ---------- */
+  .day-nav{ display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; margin-bottom:16px; scrollbar-width:none;}
+  .day-nav::-webkit-scrollbar{ display:none;}
+  .day-btn{
+    flex:0 0 auto; font-family:var(--mono); font-size:11.5px; font-weight:600;
+    background:var(--panel); border:1px solid var(--line); color:var(--chalk-dim);
+    padding:8px 12px; border-radius:20px; cursor:pointer; white-space:nowrap;
+  }
+  .day-btn.is-active{ background:var(--gold); border-color:var(--gold); color:#221a00; }
+  .day-btn.is-today{ box-shadow:0 0 0 2px rgba(244,180,0,0.5); }
+
+  .day-header{ margin-bottom:14px;}
+  .day-header .d-title{ font-family:var(--disp); font-size:26px; font-weight:600; color:var(--chalk); line-height:1;}
+  .day-header .d-sub{ font-size:12.5px; color:var(--turf-soft); font-weight:600; margin-top:3px;}
+
+  .duty-strip{
+    display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;
+  }
+  .duty-chip{
+    flex:1 1 auto; background:rgba(224,90,78,0.10); border:1px solid rgba(224,90,78,0.3);
+    border-radius:10px; padding:8px 10px; font-size:11.5px; color:var(--chalk-dim);
+  }
+  .duty-chip b{ display:block; color:var(--red); font-size:9.5px; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:2px; font-weight:700;}
+
+  .timeline{ position:relative; padding-left:26px;}
+  .timeline::before{ content:""; position:absolute; left:6px; top:4px; bottom:4px; width:1px; background:var(--line-strong);}
+  .t-item{ position:relative; padding-bottom:20px;}
+  .t-item:last-child{ padding-bottom:0;}
+  .t-dot{
+    position:absolute; left:-26px; top:2px; width:13px; height:13px; border-radius:50%;
+    background:var(--panel-3); border:2px solid var(--chalk-dimmer);
+  }
+  .t-item.is-game .t-dot{ border-color:var(--gold); background:var(--gold);}
+  .t-item.is-highlight .t-dot{ border-color:var(--turf); background:var(--turf);}
+  .t-time{ font-family:var(--mono); font-size:11px; color:var(--gold-soft); font-weight:600; letter-spacing:0.3px;}
+  .t-title{ font-size:14.5px; font-weight:600; color:var(--chalk); margin:2px 0 3px;}
+  .t-detail{ font-size:12.5px; color:var(--chalk-dim); line-height:1.5;}
+  .t-tag{
+    display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase;
+    padding:2px 7px; border-radius:6px; margin-top:6px; margin-right:5px;
+  }
+  .t-tag.game{ background:rgba(244,180,0,0.15); color:var(--gold-soft);}
+  .t-tag.family{ background:rgba(143,163,189,0.15); color:var(--chalk-dim);}
+  .t-tag.mandatory{ background:rgba(224,90,78,0.16); color:var(--red);}
+
+  /* ---------- packing tab ---------- */
+  .progress-wrap{ margin-bottom:18px;}
+  .progress-bar{ height:8px; background:var(--panel-3); border-radius:6px; overflow:hidden; border:1px solid var(--line);}
+  .progress-fill{ height:100%; background:linear-gradient(90deg, var(--turf), var(--turf-soft)); width:0%; transition:width .3s ease;}
+  .progress-label{ display:flex; justify-content:space-between; font-size:11px; color:var(--chalk-dimmer); margin-top:6px; font-family:var(--mono);}
+
+  .pack-group{ margin-bottom:6px;}
+  .pack-item{
+    display:flex; align-items:flex-start; gap:11px; padding:11px 4px;
+    border-bottom:1px solid var(--line); cursor:pointer;
+  }
+  .pack-item:last-child{ border-bottom:none;}
+  .pack-check{
+    flex-shrink:0; width:20px; height:20px; border-radius:6px; margin-top:1px;
+    border:1.5px solid var(--chalk-dimmer); display:flex; align-items:center; justify-content:center;
+    transition:all .15s ease;
+  }
+  .pack-item.checked .pack-check{ background:var(--turf); border-color:var(--turf);}
+  .pack-check svg{ opacity:0; transform:scale(0.6); transition:all .15s ease;}
+  .pack-item.checked .pack-check svg{ opacity:1; transform:scale(1);}
+  .pack-text b{ font-size:13.5px; color:var(--chalk); font-weight:600; display:block;}
+  .pack-item.checked .pack-text b{ color:var(--chalk-dimmer); text-decoration:line-through;}
+  .pack-text span{ font-size:12px; color:var(--chalk-dim); line-height:1.45; display:block; margin-top:2px;}
+  .must-badge{
+    display:inline-block; font-size:9px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+    background:rgba(224,90,78,0.16); color:var(--red); padding:1.5px 6px; border-radius:5px; margin-left:6px; vertical-align:2px;
+  }
+  .reset-link{ font-size:11.5px; color:var(--chalk-dimmer); text-align:center; margin-top:16px; text-decoration:underline; cursor:pointer;}
+
+  /* ---------- dining ---------- */
+  .hours-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 4px;}
+  .hours-cell{ background:var(--panel-3); border:1px solid var(--line); border-radius:10px; padding:10px 11px;}
+  .hours-cell .hd{ font-family:var(--mono); font-size:10px; color:var(--gold-soft); text-transform:uppercase; letter-spacing:0.6px; margin-bottom:3px;}
+  .hours-cell .hv{ font-size:13px; color:var(--chalk); font-weight:600;}
+  .meal-block{ margin-bottom:14px;}
+  .meal-block .mb-title{ font-size:13.5px; font-weight:700; color:var(--gold-soft); margin-bottom:4px;}
+  .meal-block p{ font-size:13px; color:var(--chalk-dim); line-height:1.55; margin:0;}
+  .rule-list{ list-style:none; margin:0; padding:0;}
+  .rule-list li{
+    font-size:13px; color:var(--chalk-dim); line-height:1.5; padding:9px 0 9px 20px; position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .rule-list li:last-child{ border-bottom:none;}
+  .rule-list li::before{ content:"⚾"; position:absolute; left:0; top:8px; font-size:11px; opacity:0.8;}
+
+  /* ---------- map tab ---------- */
+  .map-cat{ margin-bottom:4px;}
+  .map-cat-title{ font-size:12.5px; font-weight:700; color:var(--turf-soft); text-transform:uppercase; letter-spacing:0.6px; margin:16px 0 8px;}
+  .map-cat-title:first-child{ margin-top:0;}
+  .map-list{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;}
+  .map-tag{
+    font-size:12px; color:var(--chalk); background:var(--panel-3); border:1px solid var(--line);
+    padding:6px 10px; border-radius:8px;
+  }
+  .map-tag b{ color:var(--gold-soft); font-family:var(--mono); margin-right:5px;}
+
+  /* ---------- faq ---------- */
+  .search-wrap{ position:relative; margin-bottom:16px;}
+  .search-input{
+    width:100%; background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px 12px 38px; color:var(--chalk); font-size:14px; font-family:var(--body);
+  }
+  .search-input:focus{ outline:none; border-color:var(--gold);}
+  .search-wrap svg{ position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--chalk-dimmer);}
+  .faq-cat-title{ font-size:11px; font-weight:700; color:var(--gold-soft); text-transform:uppercase; letter-spacing:0.8px; margin:20px 0 8px;}
+  .faq-cat-title:first-of-type{ margin-top:0;}
+  .faq-item{ border-bottom:1px solid var(--line); }
+  .faq-q{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding:13px 2px; cursor:pointer; font-size:13.5px; font-weight:600; color:var(--chalk); line-height:1.4;
+  }
+  .faq-q svg{ flex-shrink:0; color:var(--chalk-dimmer); transition:transform .2s ease;}
+  .faq-item.open .faq-q svg{ transform:rotate(45deg); color:var(--gold);}
+  .faq-a{ max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .faq-item.open .faq-a{ max-height:400px;}
+  .faq-a p{ font-size:12.5px; color:var(--chalk-dim); line-height:1.6; margin:0 2px 14px; }
+  .no-results{ text-align:center; color:var(--chalk-dimmer); font-size:13px; padding:30px 10px;}
+
+  /* ---------- bottom nav ---------- */
+  .bottom-nav{
+    position:sticky; bottom:0; z-index:30;
+    max-width:520px; margin:0 auto; width:100%;
+    background:rgba(11,22,34,0.92); backdrop-filter:blur(10px);
+    border-top:1px solid var(--line-strong);
+    display:flex; padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+  }
+  .nav-btn{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+    background:none; border:none; color:var(--chalk-dimmer); padding:7px 2px 6px; cursor:pointer;
+    font-family:var(--body); font-size:9.5px; font-weight:600; letter-spacing:0.2px;
+  }
+  .nav-btn svg{ width:20px; height:20px; }
+  .nav-btn.is-active{ color:var(--gold-soft); }
+
+  a{ color:var(--gold-soft); }
+  .footer-note{ text-align:center; font-size:11px; color:var(--chalk-dimmer); margin:24px 0 6px; line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <div>
+        <div class="brand-mark">STARS SETHI<span>·</span></div>
+        <div class="brand-sub">Cooperstown 12U</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="week-chip" id="topbarChip">JUL 29 – AUG 4</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ================= TODAY ================= -->
+    <section class="tab-panel active" id="tab-today">
+      <div class="scoreboard">
+        <div class="sb-row1">
+          <span class="sb-daylabel" id="sbDayLabel">DAY 1 · OPENING DAY</span>
+          <span class="sb-date" id="sbDate">WED JUL 29</span>
+        </div>
+        <div class="sb-big" id="sbBig">Gates open <em>tomorrow</em></div>
+        <div class="sb-status" id="sbStatus">First stop: player &amp; family arrival, 8:00–8:30 AM.</div>
+        <div class="sb-countdown" id="sbCountdown"></div>
+        <div class="sb-games" id="sbGames"></div>
+      </div>
+
+      <div class="eyebrow">Team notes</div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">🗒️ Bunkhouse, contacts, reminders</div>
+        <textarea class="notes" id="notesBox" placeholder="e.g. Bunkhouse: Yankee Stadium (H) · Coach Mike cell: 555-0100 · Meet at Sal's 11am Day 4..."></textarea>
+        <div class="save-hint">Saved automatically on this device.</div>
+      </div>
+
+      <div class="eyebrow">Quick links</div>
+      <div class="quicklinks">
+        <a class="qlink" href="https://tourneymachine.com/Public/Results/Division.aspx?IDTournament=h202607101438550321df32f843d4d4e&IDDivision=h20260710143855033455f9483fede46" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+          <span>Live Schedule<span class="sm">Stars Sethi · Tourney Machine</span></span>
+        </a>
+        <a class="qlink" href="https://cooperstown.com/experience/map/" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3z"/></svg>
+          <span>Campus Map<span class="sm">Interactive + PDF</span></span>
+        </a>
+        <a class="qlink" href="https://live.cooperstown.com/" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg>
+          <span>Watch Live<span class="sm">Pixellot streaming</span></span>
+        </a>
+        <a class="qlink" href="https://baseballhall.org/" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 015 5c0 3-2 5-2 8H9c0-3-2-5-2-8a5 5 0 015-5z"/><path d="M9 19h6v3H9z"/></svg>
+          <span>Hall of Fame<span class="sm">baseballhall.org</span></span>
+        </a>
+        <a class="qlink" href="https://cooperstown.com/register/faq/" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 2-3 4M12 17h.01"/></svg>
+          <span>Full FAQ<span class="sm">cooperstown.com</span></span>
+        </a>
+      </div>
+
+      <div class="footer-note">Cooperstown All Star Village · 4158 State Highway 23, Oneonta, NY 13820<br>(607) 432-7483</div>
+    </section>
+
+    <!-- ================= SCHEDULE ================= -->
+    <section class="tab-panel" id="tab-schedule">
+      <h1 class="page-title">Week Schedule</h1>
+      <p class="page-sub">Tap a day. Team info comes from your coach's onsite agenda — official facility hours and activities layer in around it.</p>
+      <a class="qlink" style="margin-bottom:16px;" href="https://tourneymachine.com/Public/Results/Division.aspx?IDTournament=h202607101438550321df32f843d4d4e&IDDivision=h20260710143855033455f9483fede46" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+        <span>Open live official schedule<span class="sm">Stars Sethi division — Tourney Machine, updates in real time</span></span>
+      </a>
+      <div class="day-nav" id="dayNav"></div>
+      <div id="dayContent"></div>
+    </section>
+
+    <!-- ================= PACKING ================= -->
+    <section class="tab-panel" id="tab-packing">
+      <h1 class="page-title">Packing List</h1>
+      <p class="page-sub">Check items off as they go in the bag. Your progress is saved on this device.</p>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-label"><span id="progressText">0 of 0 packed</span><span id="progressPct">0%</span></div>
+      </div>
+
+      <div class="eyebrow">Must bring</div>
+      <div class="card"><div class="pack-group" id="mustBringList"></div></div>
+
+      <div class="eyebrow">Suggested</div>
+      <div class="card"><div class="pack-group" id="suggestedList"></div></div>
+
+      <div class="reset-link" id="resetPacking">Reset checklist</div>
+    </section>
+
+    <!-- ================= DINING ================= -->
+    <section class="tab-panel" id="tab-dining">
+      <h1 class="page-title">Team Dining</h1>
+      <p class="page-sub">Player Pavilion, behind The Clubhouse restaurant.</p>
+
+      <div class="card">
+        <div class="card-title">🕐 Hours this week</div>
+        <div class="hours-grid">
+          <div class="hours-cell"><div class="hd">Day 1</div><div class="hv">7 – 10 PM</div></div>
+          <div class="hours-cell"><div class="hd">Days 2–5</div><div class="hv">6 AM – 10 PM</div></div>
+          <div class="hours-cell"><div class="hd">Day 6</div><div class="hv">6 AM – 7 PM</div></div>
+          <div class="hours-cell"><div class="hd">Day 7</div><div class="hv">Move-out, no dining</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🍽️ What's served</div>
+        <div class="meal-block">
+          <div class="mb-title">Breakfast</div>
+          <p>Hot options like eggs, breakfast meats, and potatoes, plus waffles, pancakes, and breakfast sandwiches. Yogurt, cereal, and fresh fruit always available.</p>
+        </div>
+        <div class="meal-block">
+          <div class="mb-title">Lunch</div>
+          <p>Rotating pizzas, burgers, wraps, and quesadillas, plus a build-your-own salad bar and a fry station.</p>
+        </div>
+        <div class="meal-block">
+          <div class="mb-title">Dinner</div>
+          <p>Chef-prepared entrées that change through the week, alongside the salad bar, fry station, and grab-and-go options. Opening Day debuts a new Texas-style BBQ spread.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📋 House rules</div>
+        <ul class="rule-list" id="diningRules"></ul>
+      </div>
+
+      <div class="eyebrow">Off-site / special</div>
+      <div class="card">
+        <div class="meal-block">
+          <div class="mb-title">Day 4 team lunch</div>
+          <p>Meet at Sal's Pizzeria of Cooperstown, 110 Main St, at 11:00 AM before the group Hall of Fame tour.</p>
+        </div>
+        <div class="meal-block">
+          <div class="mb-title">Want a private team dinner?</div>
+          <p>Home Run Dugout (batting-bay hangout, up to 40 guests) and The Clubhouse Suite (sit-down, up to 20) can be reserved — booking opens 10 days before your week and fills fast.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MAP ================= -->
+    <section class="tab-panel" id="tab-map">
+      <h1 class="page-title">Campus Map</h1>
+      <p class="page-sub">Numbered legend from the official campus map — use it alongside the interactive map for exact locations.</p>
+
+      <div class="quicklinks" style="margin-bottom:18px;">
+        <a class="qlink" href="https://cooperstown.com/experience/map/" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3z"/></svg>
+          <span>Interactive Map<span class="sm">cooperstown.com</span></span>
+        </a>
+        <a class="qlink" href="http://cooperstown.com/wp-content/uploads/2026/05/CASV-CAMPUS-MAP-2026-5.1.pdf" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+          <span>Download PDF<span class="sm">Printable version</span></span>
+        </a>
+      </div>
+
+      <div id="mapLegend"></div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section class="tab-panel" id="tab-faq">
+      <h1 class="page-title">FAQ</h1>
+      <p class="page-sub">Condensed from the official Cooperstown All Star Village FAQ.</p>
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="search-input" id="faqSearch" placeholder="Search cleats, food, weather, wristbands…">
+      </div>
+      <div id="faqList"></div>
+    </section>
+
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="nav-btn is-active" data-tab="today">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V10l8-6 8 6v12"/><path d="M9 22V14h6v8"/></svg>
+      Today
+    </button>
+    <button class="nav-btn" data-tab="schedule">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+      Schedule
+    </button>
+    <button class="nav-btn" data-tab="packing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8V6a6 6 0 0112 0v2"/><rect x="3" y="8" width="18" height="13" rx="2"/></svg>
+      Packing
+    </button>
+    <button class="nav-btn" data-tab="dining">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v7a3 3 0 006 0V2M9 9v13M18 2c-2 2-2 5-2 7a2 2 0 004 0V2z"/></svg>
+      Dining
+    </button>
+    <button class="nav-btn" data-tab="map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3z"/></svg>
+      Map
+    </button>
+    <button class="nav-btn" data-tab="faq">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 2-3 4M12 17h.01"/></svg>
+      FAQ
+    </button>
+  </nav>
+</div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const TRIP_START = new Date('2026-07-29T08:00:00');
+const MOVEOUT_DEADLINE = new Date('2026-08-04T08:00:00');
+
+const SCHEDULE = [
+  { day:1, date:'Wed, Jul 29', short:'WED 29', label:'Opening Day',
+    duty:null,
+    items:[
+      {time:'8:00 AM', title:'Player & family arrival', tag:'family',
+        detail:"Players wear the green roster shirt & shorts from swag. Families wear Stars Spirit Ceremony shirts. Leave everything in the car except pins, snacks, and skills-competition gear."},
+      {time:'8:00 AM', title:'Food & beverage outlets open', detail:'The Clubhouse, Upper Deck, and other outlets open for the day.'},
+      {time:'9:00 AM', title:'Merch outlets open', detail:'Pre-orders available for pickup.'},
+      {time:'9:00 AM – 12:00 PM', title:'Coaches check-in & uniform exchange', tag:'mandatory',
+        detail:'Coach checks in the whole team at Player Dining Pavilion — valid photo ID required. This is the only window to exchange uniform sizes, closes sharp at 4:15 PM.'},
+      {time:'10:00 AM – 3:00 PM', title:'Skills Competition qualifiers', tag:'game',
+        detail:'Blue jersey + wristband required. Home Run Derby: Fields 3 & 7 · Fastest Player: Field 6 · Turn Two (Double Play): Field 4. All qualifiers must finish by 3:00 PM.'},
+      {time:'10:00 AM – 4:00 PM', title:'Team photos', detail:'Glossy Finish Photo Studio, behind the Cooperstown Gear Shop. Coach gets the time slot at check-in.'},
+      {time:'11:00 AM', title:'Team pizza lunch', detail:'Restaurant & bar open. Organizer: Ashley Blossom. Grab belongings from the car afterward for move-in.'},
+      {time:'12:00 – 4:15 PM', title:'Bunkhouse move-in', tag:'mandatory', detail:'Parents must be out of the bunkhouse area by 4:15 PM sharp.'},
+      {time:'3:30 – 4:30 PM', title:'Mandatory coaches meeting', tag:'mandatory', detail:'Player Dining Pavilion, includes an MLB Ambassador Q&A.'},
+      {time:'3:30 PM', title:'Reserve family spots', detail:'Parents can reserve viewing spots for Opening Ceremony at Field 5 (first-come, first-served).'},
+      {time:'5:00 PM', title:'Mandatory team fire drill', tag:'mandatory', detail:'Bring ALL equipment, banner, and parade swag. Blue Cooperstown jerseys, white pants, team socks.'},
+      {time:'5:30 PM', title:'Opening Ceremonies, Player Parade & Skills Finals', tag:'game',
+        detail:'Field 5. T-shirt toss, player march, national anthem, then Skills Competition finals.'},
+      {time:'7:00 – 10:00 PM', title:'Player & Coach BBQ', tag:'family', detail:'Players and coaches only — wristbands required.'},
+    ]
+  },
+  { day:2, date:'Thu, Jul 30', short:'THU 30', label:'Pool Play — Day 1',
+    duty:{ bunk:'Elizabeth Phelps', snacks:'Cortney Spritzer' },
+    items:[
+      {time:'6:00 AM – 10:00 PM', title:'Team Dining open', detail:'Player Pavilion.'},
+      {time:'2:00 PM', title:'GAME 1 vs Costa Mesa Gauchos', tag:'game', detail:'Field 1. Families: wear Mom/Dad/Sibling shirts.'},
+      {time:'6:00 PM', title:'GAME 2 vs Three Village Patriots', tag:'game', detail:'Field 4.'},
+    ]
+  },
+  { day:3, date:'Fri, Jul 31', short:'FRI 31', label:'Pool Play — Day 2',
+    duty:{ snacks:'Carrie Castro' },
+    items:[
+      {time:'6:00 AM – 10:00 PM', title:'Team Dining open', detail:'Player Pavilion.'},
+      {time:'2:00 PM', title:'GAME 1 vs Santa Monica Riptide', tag:'game', detail:'Field 2.'},
+      {time:'10:00 AM – 5:00 PM', title:'Cornhole Classic prelims', detail:"Timeslot notified by email 24–48 hrs ahead. Win your group to reach the Day 5 final four."},
+      {time:'10:30 PM', title:'GAME 2 vs Next Pitch Black Bears', tag:'game', detail:'Field 8.'},
+    ]
+  },
+  { day:4, date:'Sat, Aug 1', short:'SAT 1', label:'Pool Play — Day 3',
+    duty:{ snacks:'Janine Valosky' },
+    items:[
+      {time:'6:00 AM – 10:00 PM', title:'Team Dining open', detail:'Player Pavilion.'},
+      {time:'8:00 AM', title:'GAME 3 vs Millbrae Maddogs', tag:'game', detail:'Field 6.'},
+      {time:'11:00 AM – 7:00 PM', title:'Team lunch, Hall of Fame & Cooperstown visit', tag:'family',
+        detail:"Meet at Sal's Pizzeria (110 Main St) at 11 AM, then a group Hall of Fame tour, then family/town time. Players must be back at ASV by 7:00 PM. Suggested parking: Doubleday Field. Families: Stars Fan Gear. Team: Team Pin Shirt."},
+      {time:'7:00 PM', title:'Players report back', detail:'Report to the bunkhouse.'},
+      {time:'10:00 PM', title:'GAME 4 vs Top Level 12U Elite', tag:'game', detail:'Field 4.'},
+    ]
+  },
+  { day:5, date:'Sun, Aug 2', short:'SUN 2', label:'Bracket Play — Day 1',
+    duty:null,
+    items:[
+      {time:'6:00 AM – 10:00 PM', title:'Team Dining open', detail:'Player Pavilion.'},
+      {time:'8:00 AM', title:'Bracket play begins', tag:'game', detail:'Cooper, Monster & Championship bracket games. Slots sent out after Day 4\'s final pool-play game.'},
+      {time:'3:00 PM', title:'Goat Yoga', detail:'Free, no registration — The Grove, behind the Info Booth.'},
+      {time:'5:00 PM', title:'Cornhole Classic Championship', detail:'Pre-registration required.'},
+      {time:'6:30 PM', title:'Mom Home Run Derby', detail:'Field 5. Pre-registration required, spots limited.'},
+      {time:'8:30 PM', title:'Kids Run the Bases', detail:'Field 5. No registration needed, ages 10 & under.'},
+      {time:'9:30 PM', title:'Fireworks', tag:'family', detail:'Campus-wide.'},
+      {time:'11:00 PM', title:'Lights out', detail:'Bunkhouse quiet hours begin.'},
+    ]
+  },
+  { day:6, date:'Mon, Aug 3', short:'MON 3', label:'Championship Day',
+    duty:null,
+    items:[
+      {time:'6:00 AM – 7:00 PM', title:'Team Dining open', detail:'Final dining day of the week.'},
+      {time:'10:00 AM', title:'Bracket play continues', tag:'game', detail:'Cooper, Monster & Gold bracket games continue.'},
+      {time:'6:00 PM', title:'Championship Game', tag:'game', detail:'Field 5. Stadium announcers, walk-up music, in-game promos.'},
+    ]
+  },
+  { day:7, date:'Tue, Aug 4', short:'TUE 4', label:'Move-Out Day',
+    duty:null,
+    items:[
+      {time:'By 8:00 AM', title:'Bunkhouses vacated', tag:'mandatory', detail:'All teams must be fully moved out by 8:00 AM. Parents may assist with move-out.'},
+    ]
+  },
+];
+
+const PACKING = {
+  must: [
+    {n:'Cooperstown Stars roster shirt', d:'Wear on Opening Day.'},
+    {n:'2 pairs white baseball pants (navy piping)', d:'ASV launders all uniform pieces daily — jerseys, pants, sliding shorts, socks.'},
+    {n:'Baseball gear', d:"Bat, glove, sunglasses, eye black, catcher's gear, etc."},
+    {n:'2 pairs sliding shorts'},
+    {n:'Long-sleeved navy undershirts', d:'For colder late-night games.'},
+    {n:'Extra baseball socks', d:'Swag-bag pair plus 2 more navy Stars socks.'},
+    {n:'Navy baseball belts'},
+    {n:'Cleats & turf shoes', d:'Bring both in case of rain — cleats must be molded, no metal spikes.'},
+    {n:'Trading pins', d:'Handed out at the team send-off party.'},
+    {n:'2 gallon jugs of drinking water', d:'Used to refill the dugout cooler.'},
+    {n:'4 new leather baseballs', d:'Goes into the team bucket for use at games — not synthetic or plastic.'},
+    {n:'46 oz water bottle', d:'Yeti bottle is included in swag.'},
+    {n:'Stars swag pack', d:'Pack all of it, including the bucket, for daily use.'},
+    {n:'Chargers', d:'Included in swag.'},
+    {n:'Casual clothes', d:'About 4 regular outfits to hang out in.'},
+    {n:'Underwear'},
+    {n:'Toiletries & deodorant', d:'Community showers — swag includes a transport bag and lanyard.'},
+    {n:'Bathing suit(s)', d:'For showering and swimming.'},
+    {n:'Towels', d:'For showers and swimming — hooks provided for wet towels.'},
+    {n:'Shower shoes', d:'Included in swag bag.'},
+  ],
+  suggested: [
+    {n:'Sneakers', d:"Turf shoes and crocs are already covered by swag if you'd rather save the space."},
+    {n:'Extra pillow / blanket', d:'Only if needed — the bunkhouse bedding package already includes sheets, blanket, and a pillow.'},
+    {n:'Large ziplock bags', d:'For dirty or wet clothes and misc. items.'},
+    {n:'Ponchos', d:'All fields are turf, so games go on in the rain.'},
+    {n:'Bleacher chair / backpack cooler', d:'For family members at games.'},
+    {n:'Sunscreen'},
+    {n:'Chapstick'},
+    {n:'Body wipes', d:'Also included as part of swag.'},
+  ]
+};
+
+const DINING_RULES = [
+  "Outside food isn't allowed anywhere on campus — the one exception is All Star Hotel guests eating in their own room.",
+  'Team coolers may hold only ice + bottled water, and are allowed in the dugout and Player Village. Each team gets a card for 10 free bags of ice.',
+  'No gum and no sunflower seeds anywhere on site; no grilling or cookouts at any time.',
+  "It's a cashless campus — cards and Apple/Google Pay work everywhere. Reverse ATMs will turn cash into a Visa gift card if you need one.",
+  'Dietary restrictions (nut, gluten, dairy, vegetarian, etc.)? Email the team ahead of your week so Player Dining can prepare.',
+  'Hydration stations are available throughout the park to refill personal water bottles any time.',
+];
+
+const MAP_LEGEND = {
+  'Fields & Batting Cages': [
+    '2 — Batting cages (Fields 3, 5 & 6)', '3 — Batting cages (Fields 7 & 8)', '4 — Batting cages (Fields 9–12)'
+  ],
+  'Retail & Gear': [
+    '5 — Cooperstown Gear', '6 — Cooperstown Collectibles', '7 — Custom Apparel Shop',
+    '8 — Pre-Purchased Pick-Up', '9 — Home Run Dugout', '10 — Uniform Exchange',
+    '11 — Glossy Finish Studio', '12 — Power Alley Cards', '13 — Rawlings Shop', '14 — Glossy Finish Photo Shack'
+  ],
+  'Food & Beverage': [
+    '15 — The Clubhouse', '16 — The Upper Deck', '17 — The Bullpen', '18 — Cooper\'s Place',
+    '19 — Monster Shack', '20 — Monster Shakes'
+  ],
+  'Lodging': [
+    '21 — Country Inn (Rooms 1–16)', '22 — Cottage (Room 17)', '23 — Hall of Fame Suite',
+    '24 — Hotel (Rooms 18–39)', '25 — Hotel Pool & Jacuzzi'
+  ],
+  'Points of Interest': [
+    '26 — Baseball Ops Field Office', '27 — The Grove', '28 — The Overlook'
+  ],
+  'Player Village': [
+    '29 — Player Dining Pavilion', 'A — Camden Yards Bunkhouse', 'B — All Star Field Bunkhouse',
+    'C — Progressive Field Bunkhouse', 'D — Busch Stadium Bunkhouse', 'E — Turner Field Bunkhouse',
+    'F — Dodger Stadium Bunkhouse', 'G — Damaschke Bunkhouse', 'H — Yankee Stadium Bunkhouse',
+    'I — Fenway Park Bunkhouse', 'J — Wrigley Field Bunkhouse', 'K — Legends Bunkhouse'
+  ]
+};
+
+const FAQ = [
+  { cat:'Check-In & Move-In', items:[
+    {q:'When and where do we check in?', a:"Coach check-in runs 9:00 AM–12:00 PM on Opening Day at Player Dining Pavilion — a valid photo ID is required. Player Village itself doesn't open until noon."},
+    {q:'Is early check-in possible?', a:"No early access to bunkhouses, fields, or the restaurant before your week starts — you'll need other accommodations if you arrive early."},
+    {q:'What time does the uniform exchange room close?', a:'4:15 PM sharp on Opening Day, same as bunkhouse move-in — no exchanges after that, so get there early if sizes need adjusting.'},
+    {q:'Where does luggage go before move-in?', a:'There\'s no storage area — luggage stays in the car until the bunkhouse area opens at noon.'},
+    {q:"What's the process for player medications?", a:'At noon on Day 1, parents hand medications to on-site medical staff, who store them securely but do not administer them — that stays the responsibility of players/coaches. EpiPens and inhalers stay with the player at all times.'},
+  ]},
+  { cat:'Uniforms & Gear', items:[
+    {q:'What uniform pieces does the team provide?', a:'Each player receives a white home jersey, a navy away jersey, a warm-up jacket, a hat, and two pairs of socks (one red, one navy) at check-in.'},
+    {q:'What about pants?', a:"Pants are bring-your-own — white only, with matching piping across the team. Two pairs are recommended since laundry runs daily."},
+    {q:'What cleats are allowed?', a:'No metal cleats anywhere on campus. Molded cleats or turf shoes only — every field is turf as of the 2026 season.'},
+    {q:'Can players wear long sleeves under the jersey?', a:'Yes, any solid color except white (white can mess with a batter\'s depth perception) — and it goes under the jersey, never over it.'},
+    {q:'Do we need to bring warm-up baseballs?', a:'Yes — bring 2–3 per player. The dugout bucket is provided empty, and in-game balls cannot be used for warm-ups.'},
+  ]},
+  { cat:'Food, Coolers & Money', items:[
+    {q:'Can we bring outside food?', a:"No — outside food isn't permitted anywhere on campus for allergy-safety reasons, except for All Star Hotel guests eating in their own room."},
+    {q:'What can go in the team cooler?', a:'Only ice and bottled water, and it\'s allowed in the dugout and Player Village. Each team also gets a card for 10 free bags of ice.'},
+    {q:'Is the campus cash-friendly?', a:"It's fully cashless — cards, Apple Pay, and Google Pay work everywhere. Reverse ATMs convert cash into a Visa gift card if you need one."},
+    {q:'What about food allergies?', a:'Email the Cooperstown team ahead of your week with the player\'s name, team, and specific needs so Player Dining can prepare in advance.'},
+  ]},
+  { cat:'Bunkhouse Life', items:[
+    {q:'What are the bunkhouses like?', a:'Air-conditioned, holding 16–20 people, with twin bunks for players and full beds for coaches, plus two lockable bins per bunkhouse (bring your own lock).'},
+    {q:'Do we need to bring bedding?', a:'Yes, unless your team ordered the bedding package (sheets, pillow, blanket, cooler, and a box fan). Bring twin-size bedding or a sleeping bag otherwise.'},
+    {q:'What are the showers like?', a:'Open-bay and shared for players. Bring shower shoes, a quick-dry towel (not provided), and a small toiletry caddy.'},
+    {q:'Are snacks allowed in the bunkhouse?', a:'No — water is the only exception. Full meal and snack access is at Player Dining.'},
+    {q:'Is there WiFi and cell service?', a:'Yes to both — WiFi is available in every bunkhouse, and Verizon, AT&T, and T-Mobile all get reliable service on property.'},
+  ]},
+  { cat:'Games & Weather', items:[
+    {q:'How many games is the team guaranteed?', a:'7 games, weather permitting: 6 pool-play games plus 1 single-elimination playoff game.'},
+    {q:'Who can be in the dugout?', a:'Only players and coaches wearing wristbands. Parents watch from the separate, covered spectator dugout.'},
+    {q:'What happens during a rain delay?', a:'Tournament directors make the call on stopping play; coaches are notified directly and are responsible for relaying new start times to their families.'},
+    {q:'Where do schedule changes get posted?', a:'LeagueApps is the live source of truth for field assignments and changes, sent via both email and SMS — worth double-checking notifications are turned on before the week starts.'},
+  ]},
+  { cat:'Spectators & Family Fun', items:[
+    {q:'Is there an admission fee to watch?', a:'No admission fee and no parking fee for anyone — great for grandparents flying in for a single game.'},
+    {q:'Can we bring chairs or a tent?', a:'Personal chairs and umbrellas are welcome; pop-up tents and canopies are not allowed at field level.'},
+    {q:'Can family watch remotely?', a:'Yes — every game streams live and free through Pixellot at live.cooperstown.com.'},
+    {q:'Are Hall of Fame tickets included?', a:'Players and coaches get a complimentary ticket at check-in. Family tickets are purchased separately — buying online ahead of time skips the line.'},
+    {q:'What can younger siblings do?', a:'Chase foul balls for a baseball-card punch card, trade pins all week, join Kids Run the Bases and Goat Yoga on Day 5 (both free, no registration).'},
+  ]},
+  { cat:'Departure', items:[
+    {q:'When can we leave if we\'re eliminated early?', a:"Anytime after your team's final game wraps — no need to wait out the whole week."},
+    {q:'What is the final move-out deadline?', a:'All bunkhouses must be fully vacated by 8:00 AM on Day 7, regardless of when the last game finished.'},
+    {q:'What if something gets left behind?', a:"Check Baseball Ops or the Info Booth on-site first. After you've left, email the Lost & Found team — items are typically held through the end of the season."},
+  ]},
+];
+
+/* ============================================================
+   STORAGE HELPERS (artifact persistent storage, personal/local)
+   ============================================================ */
+async function loadState(key, fallback){
+  try{
+    const raw = localStorage.getItem('casv-'+key);
+    return raw !== null ? JSON.parse(raw) : fallback;
+  }catch(e){ return fallback; }
+}
+async function saveState(key, value){
+  try{ localStorage.setItem('casv-'+key, JSON.stringify(value)); }catch(e){ /* ignore */ }
+}
+
+let packState = {};
+
+/* ============================================================
+   TAB SWITCHING
+   ============================================================ */
+document.querySelectorAll('.nav-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('is-active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('is-active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'instant'});
+  });
+});
+
+/* ============================================================
+   TODAY / SCOREBOARD
+   ============================================================ */
+function getDayIndexForDate(now){
+  // returns 0-based index into SCHEDULE for "today", or -1 if before trip / after trip
+  const startOfDay1 = new Date(TRIP_START.getFullYear(), TRIP_START.getMonth(), TRIP_START.getDate());
+  const diffDays = Math.floor((new Date(now.getFullYear(),now.getMonth(),now.getDate()) - startOfDay1) / 86400000);
+  if(diffDays < 0) return -1;
+  if(diffDays > 6) return 7;
+  return diffDays;
+}
+
+function renderScoreboard(){
+  const now = new Date();
+  const idx = getDayIndexForDate(now);
+
+  const dayLabelEl = document.getElementById('sbDayLabel');
+  const dateEl = document.getElementById('sbDate');
+  const bigEl = document.getElementById('sbBig');
+  const statusEl = document.getElementById('sbStatus');
+  const cdEl = document.getElementById('sbCountdown');
+  const gamesEl = document.getElementById('sbGames');
+
+  let activeDay = null;
+
+  if(idx === -1){
+    // pre-trip countdown
+    const diff = TRIP_START - now;
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    // Use calendar-date distance (not raw hours) so "tomorrow" doesn't flip to
+    // "today" just because it's under 24 hours away later in the day.
+    const startOfDay1 = new Date(TRIP_START.getFullYear(), TRIP_START.getMonth(), TRIP_START.getDate());
+    const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const calendarDaysUntil = Math.round((startOfDay1 - nowDateOnly)/86400000);
+    dayLabelEl.textContent = 'BEFORE OPENING DAY';
+    dateEl.textContent = 'STARTS WED JUL 29';
+    let headline;
+    if(calendarDaysUntil <= 0) headline = `Gates open <em>today</em>`;
+    else if(calendarDaysUntil === 1) headline = `Gates open <em>tomorrow</em>`;
+    else headline = `<em>${calendarDaysUntil}</em> days to go`;
+    bigEl.innerHTML = headline;
+    statusEl.textContent = "Player & family arrival is 8:00–8:30 AM Opening Day. Leave everything in the car except pins, snacks, and skills-competition gear.";
+    cdEl.innerHTML = countdownUnits(d,h,m);
+    gamesEl.innerHTML = '<div class="sb-empty">Finish packing — see the Packing tab.</div>';
+  } else if(idx === 7){
+    dayLabelEl.textContent = 'TRIP COMPLETE';
+    dateEl.textContent = 'SEE YOU NEXT SEASON';
+    bigEl.innerHTML = `Safe <em>travels</em>`;
+    statusEl.textContent = 'Bunkhouses were vacated by 8:00 AM on Move-Out Day. Thanks for an unforgettable week, Stars!';
+    cdEl.innerHTML = '';
+    gamesEl.innerHTML = '';
+  } else {
+    activeDay = SCHEDULE[idx];
+    dayLabelEl.textContent = `DAY ${activeDay.day} · ${activeDay.label.toUpperCase()}`;
+    dateEl.textContent = activeDay.date.toUpperCase();
+    const gameItems = activeDay.items.filter(i=>i.tag==='game');
+    if(gameItems.length){
+      bigEl.innerHTML = `<em>${gameItems.length}</em> game${gameItems.length>1?'s':''} today`;
+    } else {
+      bigEl.innerHTML = `Rest &amp; <em>reset</em>`;
+    }
+    statusEl.textContent = activeDay.items[0] ? (activeDay.items[0].time + ' — ' + activeDay.items[0].title) : '';
+    // countdown to move-out deadline on last day, else to end of day
+    if(activeDay.day === 7){
+      cdEl.innerHTML = '';
+    } else {
+      cdEl.innerHTML = '';
+    }
+    // show today's game list
+    if(gameItems.length){
+      gamesEl.innerHTML = gameItems.map(g=>`
+        <div class="sb-game">
+          <span class="vs">${g.title.replace('GAME '+ (g.title.match(/^GAME (\d)/)||[])[1]+' ','')}</span>
+          <span class="meta">${g.time}${g.detail && g.detail.match(/Field \d+/) ? ' · '+g.detail.match(/Field \d+/)[0] : ''}</span>
+        </div>`).join('');
+    } else {
+      gamesEl.innerHTML = '<div class="sb-empty">No games scheduled today — check the Schedule tab for activities.</div>';
+    }
+  }
+
+  // top bar chip
+  document.getElementById('topbarChip').textContent = idx>=0 && idx<=6 ? `DAY ${SCHEDULE[idx].day} OF 7` : 'JUL 29 – AUG 4';
+
+  return activeDay;
+}
+function countdownUnits(d,h,m){
+  return `
+    <div class="sb-unit"><span class="n">${d}</span><span class="l">Days</span></div>
+    <div class="sb-unit"><span class="n">${h}</span><span class="l">Hours</span></div>
+    <div class="sb-unit"><span class="n">${m}</span><span class="l">Mins</span></div>`;
+}
+
+/* ============================================================
+   SCHEDULE TAB
+   ============================================================ */
+let currentDayIdx = 0;
+
+function renderDayNav(){
+  const nav = document.getElementById('dayNav');
+  const todayIdx = getDayIndexForDate(new Date());
+  nav.innerHTML = SCHEDULE.map((d,i)=>`
+    <button class="day-btn ${i===currentDayIdx?'is-active':''} ${i===todayIdx?'is-today':''}" data-idx="${i}">
+      D${d.day} · ${d.short}
+    </button>`).join('');
+  nav.querySelectorAll('.day-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{ currentDayIdx = parseInt(b.dataset.idx); renderDayNav(); renderDayContent(); });
+  });
+}
+
+function renderDayContent(){
+  const d = SCHEDULE[currentDayIdx];
+  const wrap = document.getElementById('dayContent');
+  let dutyHtml = '';
+  if(d.duty){
+    const chips = [];
+    if(d.duty.dugout) chips.push(`<div class="duty-chip"><b>Dugout cooler</b>${d.duty.dugout}</div>`);
+    if(d.duty.bunk) chips.push(`<div class="duty-chip"><b>Bunk cooler</b>${d.duty.bunk}</div>`);
+    if(d.duty.snacks) chips.push(`<div class="duty-chip"><b>Team snacks</b>${d.duty.snacks}</div>`);
+    if(chips.length) dutyHtml = `<div class="duty-strip">${chips.join('')}</div>`;
+  }
+  wrap.innerHTML = `
+    <div class="day-header">
+      <div class="d-title">Day ${d.day} — ${d.date}</div>
+      <div class="d-sub">${d.label}</div>
+    </div>
+    ${dutyHtml}
+    <div class="timeline">
+      ${d.items.map(it=>`
+        <div class="t-item ${it.tag==='game'?'is-game':''} ${it.tag==='mandatory'?'is-highlight':''}">
+          <div class="t-dot"></div>
+          <div class="t-time">${it.time}</div>
+          <div class="t-title">${it.title}</div>
+          ${it.detail?`<div class="t-detail">${it.detail}</div>`:''}
+          ${it.tag?`<span class="t-tag ${it.tag}">${it.tag}</span>`:''}
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+/* ============================================================
+   PACKING TAB
+   ============================================================ */
+function packKey(section, idx){ return section+'-'+idx; }
+
+function renderPacking(){
+  const mustWrap = document.getElementById('mustBringList');
+  const sugWrap = document.getElementById('suggestedList');
+
+  mustWrap.innerHTML = PACKING.must.map((it,i)=>packItemHtml('must', i, it, true)).join('');
+  sugWrap.innerHTML = PACKING.suggested.map((it,i)=>packItemHtml('sug', i, it, false)).join('');
+
+  document.querySelectorAll('.pack-item').forEach(el=>{
+    el.addEventListener('click', async ()=>{
+      const key = el.dataset.key;
+      packState[key] = !packState[key];
+      el.classList.toggle('checked', packState[key]);
+      updateProgress();
+      await saveState('packing-state', packState);
+    });
+  });
+  updateProgress();
+}
+function packItemHtml(section, i, it, must){
+  const key = packKey(section, i);
+  const checked = !!packState[key];
+  return `
+    <div class="pack-item ${checked?'checked':''}" data-key="${key}">
+      <div class="pack-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0b1622" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="pack-text"><b>${it.n}${must?'<span class="must-badge">Must bring</span>':''}</b>${it.d?`<span>${it.d}</span>`:''}</div>
+    </div>`;
+}
+function updateProgress(){
+  const total = PACKING.must.length + PACKING.suggested.length;
+  const checked = Object.values(packState).filter(Boolean).length;
+  const pct = total ? Math.round((checked/total)*100) : 0;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressText').textContent = `${checked} of ${total} packed`;
+  document.getElementById('progressPct').textContent = pct+'%';
+}
+document.getElementById('resetPacking').addEventListener('click', async ()=>{
+  packState = {};
+  await saveState('packing-state', packState);
+  renderPacking();
+});
+
+/* ============================================================
+   DINING TAB
+   ============================================================ */
+function renderDining(){
+  document.getElementById('diningRules').innerHTML = DINING_RULES.map(r=>`<li>${r}</li>`).join('');
+}
+
+/* ============================================================
+   MAP TAB
+   ============================================================ */
+function renderMap(){
+  const wrap = document.getElementById('mapLegend');
+  wrap.innerHTML = Object.entries(MAP_LEGEND).map(([cat, items])=>`
+    <div class="map-cat">
+      <div class="map-cat-title">${cat}</div>
+      <div class="map-list">
+        ${items.map(it=>{
+          const [num, ...rest] = it.split(' — ');
+          return `<div class="map-tag"><b>${num}</b>${rest.join(' — ')}</div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   FAQ TAB
+   ============================================================ */
+function renderFaq(filter){
+  const wrap = document.getElementById('faqList');
+  const f = (filter||'').trim().toLowerCase();
+  let html = '';
+  let anyMatch = false;
+
+  FAQ.forEach(group=>{
+    const matched = group.items.filter(it => !f || it.q.toLowerCase().includes(f) || it.a.toLowerCase().includes(f));
+    if(!matched.length) return;
+    anyMatch = true;
+    html += `<div class="faq-cat-title">${group.cat}</div>`;
+    matched.forEach((it, i)=>{
+      html += `
+        <div class="faq-item">
+          <div class="faq-q">${it.q}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+          <div class="faq-a"><p>${it.a}</p></div>
+        </div>`;
+    });
+  });
+
+  if(!anyMatch){
+    html = `<div class="no-results">No matches — try a different word.</div>`;
+  }
+  wrap.innerHTML = html;
+
+  wrap.querySelectorAll('.faq-q').forEach(q=>{
+    q.addEventListener('click', ()=>{
+      q.parentElement.classList.toggle('open');
+    });
+  });
+}
+document.getElementById('faqSearch').addEventListener('input', (e)=>{
+  renderFaq(e.target.value);
+});
+
+/* ============================================================
+   NOTES
+   ============================================================ */
+let notesTimer = null;
+document.getElementById('notesBox').addEventListener('input', (e)=>{
+  clearTimeout(notesTimer);
+  notesTimer = setTimeout(()=>{ saveState('team-notes', e.target.value); }, 500);
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+async function init(){
+  packState = await loadState('packing-state', {});
+  const notes = await loadState('team-notes', '');
+  document.getElementById('notesBox').value = notes;
+
+  const activeDay = renderScoreboard();
+  currentDayIdx = Math.max(0, getDayIndexForDate(new Date()));
+  if(currentDayIdx > 6) currentDayIdx = 6;
+  renderDayNav();
+  renderDayContent();
+  renderPacking();
+  renderDining();
+  renderMap();
+  renderFaq('');
+
+  // refresh scoreboard every minute
+  setInterval(renderScoreboard, 60000);
+}
+init();
+</script>
+</body>
+</html>
