@@ -566,6 +566,7 @@ const MOVEOUT_DEADLINE = new Date('2026-08-04T08:00:00');
 
 /* Most recent update goes at the TOP of this list. Shown as a banner on the Today tab. */
 const UPDATES = [
+  { ts:'Jul 29, 3:20 PM', msg:'Opening Ceremonies & Player Parade moved to the morning of Day 5 (exact time TBD). Skills Competition Finals still happen Day 1 at 5:30 PM.' },
   { ts:'Jul 29, 3:05 PM', msg:'Day 4 Hall of Fame lunch now tentatively 3:00 PM (was 11:00 AM) — may still shift. Team photo album added to Quick Links.' },
   { ts:'Jul 29, 2:36 PM', msg:'Day 4: GAME 3 vs Millbrae Maddogs moved to 10:30 AM on Field 7 (was 8:00 AM, Field 6).' },
   { ts:'Jul 29, 9:15 AM', msg:'Team pizza lunch moved to 12:00 PM, now held in the bunkhouse instead of the restaurant.' },
@@ -588,10 +589,9 @@ const SCHEDULE = [
       {time:'12:00 PM', title:'Team pizza lunch', detail:'Now held in the bunkhouse (moved from the restaurant). Organizer: Ashley Blossom.'},
       {time:'12:00 – 4:15 PM', title:'Bunkhouse move-in', tag:'mandatory', detail:'Parents must be out of the bunkhouse area by 4:15 PM sharp.'},
       {time:'3:30 – 4:30 PM', title:'Mandatory coaches meeting', tag:'mandatory', detail:'Player Dining Pavilion, includes an MLB Ambassador Q&A.'},
-      {time:'3:30 PM', title:'Reserve family spots', detail:'Parents can reserve viewing spots for Opening Ceremony at Field 5 (first-come, first-served).'},
-      {time:'5:00 PM', title:'Mandatory team fire drill', tag:'mandatory', detail:'Bring ALL equipment, banner, and parade swag. Blue Cooperstown jerseys, white pants, team socks.'},
-      {time:'5:30 PM', title:'Opening Ceremonies, Player Parade & Skills Finals', tag:'highlight',
-        detail:'Field 5. T-shirt toss, player march, national anthem, then Skills Competition finals.'},
+      {time:'5:00 PM', title:'Mandatory team fire drill', tag:'mandatory', detail:'Bring ALL equipment and team banner. Blue Cooperstown jerseys, white pants, team socks.'},
+      {time:'5:30 PM', title:'Skills Competition Finals', tag:'highlight',
+        detail:'Field 5, immediately following the team fire drill.'},
       {time:'7:00 – 10:00 PM', title:'Player & Coach BBQ', tag:'family', detail:'Players and coaches only — wristbands required.'},
     ]
   },
@@ -627,6 +627,8 @@ const SCHEDULE = [
     duty:null,
     items:[
       {time:'6:00 AM – 10:00 PM', title:'Team Dining open', detail:'Player Pavilion.'},
+      {time:'Morning (time TBD)', title:'Opening Ceremonies & Player Parade', tag:'highlight',
+        detail:'Moved from Day 1. Field 5 — T-shirt toss, player march, national anthem. Exact time not yet confirmed, check back for an update.'},
       {time:'8:00 AM', title:'Bracket play begins', tag:'game', detail:'Cooper, Monster & Championship bracket games. Slots sent out after Day 4\'s final pool-play game.'},
       {time:'3:00 PM', title:'Goat Yoga', detail:'Free, no registration — The Grove, behind the Info Booth.'},
       {time:'5:00 PM', title:'Cornhole Classic Championship', detail:'Pre-registration required.'},
@@ -882,7 +884,7 @@ function renderScoreboard(){
           <span class="meta">${g.time}${g.detail && g.detail.match(/Field \d+/) ? ' · '+g.detail.match(/Field \d+/)[0] : ''}</span>
         </div>`).join('');
     } else if(activeDay.day === 1){
-      gamesEl.innerHTML = '<div class="sb-empty">No head-to-head games yet — today\'s the Skills Competition & Opening Ceremony. First game is tomorrow.</div>';
+      gamesEl.innerHTML = '<div class="sb-empty">No head-to-head games yet — today\'s the Skills Competition. First game is tomorrow.</div>';
     } else {
       gamesEl.innerHTML = '<div class="sb-empty">No games scheduled today — check the Schedule tab for activities.</div>';
     }
