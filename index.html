@@ -566,6 +566,7 @@ const MOVEOUT_DEADLINE = new Date('2026-08-04T08:00:00');
 
 /* Most recent update goes at the TOP of this list. Shown as a banner on the Today tab. */
 const UPDATES = [
+  { ts:'Jul 29, 4:35 PM', msg:'Official update: Days 5 & 6 schedules revised. Ceremony/parade now 8:15 PM Day 5, Skills Finals confirmed 10 AM Day 6, Mom\'s HR Derby moved to Day 6 at 2:30 PM. See Schedule tab for full detail.' },
   { ts:'Jul 29, 4:20 PM', msg:'Mandatory team fire drill removed from today\'s schedule.' },
   { ts:'Jul 29, 4:10 PM', msg:'Player & Coach BBQ moved up to 6:00 PM today (was 7:00 PM).' },
   { ts:'Jul 29, 3:45 PM', msg:'Uniform colors added for all 6 pool-play games — white at home, blue on the road. Check each game on the Schedule tab.' },
@@ -628,14 +629,14 @@ const SCHEDULE = [
     duty:null,
     items:[
       {time:'6:00 AM – 10:00 PM', title:'Team Dining open', detail:'Player Pavilion.'},
-      {time:'Morning (time TBD)', title:'Opening Ceremonies & Player Parade', tag:'highlight',
-        detail:'Moved from Day 1. Field 5 — T-shirt toss, player march, national anthem. Exact time not yet confirmed, check back for an update.'},
-      {time:'8:00 AM', title:'Bracket play begins', tag:'game', detail:'Cooper, Monster & Championship bracket games. Slots sent out after Day 4\'s final pool-play game.'},
+      {time:'8:00 AM', title:'Bracket Play Games Begin', tag:'game', detail:'Cooper, Monster & Championship bracket games. Slots sent out after Day 4\'s final pool-play game.'},
       {time:'3:00 PM', title:'Goat Yoga', detail:'Free, no registration — The Grove, behind the Info Booth.'},
-      {time:'5:00 PM', title:'Cornhole Classic Championship', detail:'Pre-registration required.'},
-      {time:'6:30 PM', title:'Mom Home Run Derby', detail:'Field 5. Pre-registration required, spots limited.'},
-      {time:'8:30 PM', title:'Kids Run the Bases', detail:'Field 5. No registration needed, ages 10 & under.'},
-      {time:'9:30 PM', title:'Fireworks', tag:'family', detail:'Campus-wide.'},
+      {time:'5:30 PM', title:'Cornhole Classic Final Four', detail:'Pre-registration required.'},
+      {time:'7:00 PM', title:'Teams return to bunkhouses', tag:'family', detail:'Prepare for the Team Parade Ceremony.'},
+      {time:'7:45 PM', title:'Fire alarm — line up for parade', tag:'mandatory', detail:'Teams head to Fields 11 & 12 to line up for the team parade.'},
+      {time:'8:15 PM', title:'Opening Ceremonies & Player Parade', tag:'highlight',
+        detail:'Field 5. Fireworks follow immediately after ceremonies conclude.'},
+      {time:'10:00 PM', title:'Bracket Play Games Resume', detail:'Play continues after ceremonies & fireworks wrap up.'},
       {time:'11:00 PM', title:'Lights out', detail:'Bunkhouse quiet hours begin.'},
     ]
   },
@@ -643,9 +644,11 @@ const SCHEDULE = [
     duty:null,
     items:[
       {time:'6:00 AM – 7:00 PM', title:'Team Dining open', detail:'Final dining day of the week.'},
-      {time:'Time TBD', title:'Skills Competition Finals', tag:'highlight', detail:'Moved from Day 1. Field 5 — exact time not yet confirmed, check back for an update.'},
-      {time:'10:00 AM', title:'Bracket play continues', tag:'game', detail:'Cooper, Monster & Gold bracket games continue.'},
-      {time:'6:00 PM', title:'Championship Game', tag:'game', detail:'Field 5. Stadium announcers, walk-up music, in-game promos.'},
+      {time:'10:00 AM', title:'Skills Competition Finals', tag:'highlight', detail:'Field 5.'},
+      {time:'11:30 AM', title:'Bracket Play Games Resume', tag:'game', detail:'Cooper, Monster & Gold bracket games continue.'},
+      {time:'2:30 PM', title:'Mom\'s Home Run Derby', detail:'Field 5. Pre-registration required, spots limited.'},
+      {time:'5:30 PM', title:'Cooper and Monster Championship Games', tag:'game', detail:'Field 5.'},
+      {time:'6:30 PM', title:'Gold Championship Game', tag:'game', detail:'Field 5. Stadium announcers, walk-up music, in-game promos.'},
     ]
   },
   { day:7, date:'Tue, Aug 4', short:'TUE 4', label:'Move-Out Day',
